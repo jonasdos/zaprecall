@@ -1,7 +1,7 @@
 import logo from '../assets/logo.png'
 import styled from 'styled-components'
 import Questions from './Questions.jsx'
-function Flashcard() {
+export default function Flashcard() {
  return( <Card>
     <Titulo>
       <img src={logo} alt="Icone" />
@@ -12,8 +12,6 @@ function Flashcard() {
   </Card>
   )
 }
-
-export default Flashcard
 
 const Card = styled.main`
 background-color: #FB6B6B;
@@ -31,6 +29,7 @@ display: flex;
 align-items: center;
 justify-content: space-around;
 width: 250px;
+margin-bottom: 40px;
 
 h1{
   font-family: righteous;
@@ -47,8 +46,6 @@ img {
 
 }
 `
-
-
 
 const Bottom = styled.footer`
 background-color: #FFFFFF;

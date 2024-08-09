@@ -1,40 +1,117 @@
+/* area de importação */
 import play_icon from '../assets/seta_play.png'
+import turn_over from '../assets/seta_virar.png'
+import erro from '../assets/icone_erro.png'
+import quase from '../assets/icone_quase.png'
+import zap from '../assets/icone_certo.png'
 import styled from 'styled-components'
 import {cards} from '../data/data.js'
+import { useState } from 'react'
+import Options from './Options.jsx'
 
 
-export default function Questions() {
+/* Elemento a ser incorporado no app */ 
+export default function Questions() { 
+  const [questoes, setEstadoQuestion] = useState( // Estado inicial é todos os itens de cards + a fase e status de resposta aberta e respondida
+    cards.map(() => ({
+      fase:0,
+      optionSelected: null,
+      icone: null
+    }))
+  )
+const revelaPergunta = (index) => { 
+  setEstadoQuestion(prevState =>
+    prevState.map((question, i)=> 
+      i === index ? {...question, fase: 1} : question)
+  )
+  console.log(questoes)
+}  
+const revelaResposta = (index) => {
+  console.log(index)
+  setEstadoQuestion(prevState => 
+    prevState.map((question, i) => 
+      i=== index ? {...question, fase: 2} : question))
+
+}
+
+const armazenaResposta = (indexCarta, index, option) => {
+  
+  setEstadoQuestion(prevState => 
+    prevState.map((question, i) =>
+  i === indexCarta ? {...question, optionSelected: (option === 'Zap!'? '#2FBE34'
+  : option === 'Quase não lembrei' ? 
+   '#FF922E' :'#FF3030' ), icone: (option === 'Zap!'? zap
+    : option === 'Quase não lembrei' ? 
+     quase : erro ), fase: 3} : question)
+)
+console.log(questoes)
+}
+
  return( 
-    <Questionscss>
-      {cards.map((item, index) => (
-        <Question key={index}>
-          <h1>Pergunta {index +1}</h1>
-          <img src={play_icon} alt='Icone de play'/>
+    <Container>
+     {cards.map( (item, index) =>
+      <Question key={index} fase={questoes[index].fase} cor={questoes[index].optionSelected} icone={questoes[index].icone} > 
+        { questoes[index].fase === 0 &&(
+              <>
+              <h1 onClick={() => revelaPergunta(index)}>Pergunta {index +1}</h1>
+              <img  src={play_icon} alt='Icone de play'/>
+              </>
+        )}
+          { questoes[index].fase === 1 &&(
+              <>
+              <h1>{item.question}</h1>
+              <img  src={turn_over} alt='Seta de virar' onClick={() => revelaResposta(index)} />
+              </>
+        )}
+               { questoes[index].fase === 2 &&(
+              <>
+              <h1>{item.answer}</h1>
+              <Options onClick={armazenaResposta} indexCarta={index} />
+
+              </>
+        )}
+             { questoes[index].fase === 3 &&(
+              
+              <>
+              <h1>Pergunta {index +1 }</h1>
+              <img  src={questoes[index].icone} alt='Icone de play'/>
+              </>
+        )}
+      
         </Question>
-      ))}
-    </Questionscss>
+    )}
+    </Container>
 
   )
 }
 
-const Questionscss = styled.div`
-margin: 25px 0px;
+const Container = styled.div`
 width: 300px;
-display: flex;
-flex-direction: column;
-align-items: center;
+
 `
+
 const Question = styled.div`
-margin: 12.5px;
-padding: 25px 15px 21px 15px;
-display: flex;
-background-color: #ffffff;
-width: 300px;
-justify-content: space-between;
-font-weight: 700;
-font-family: recursive;
-color: #333333;
-line-height: 19.2px;
+height: ${(props) => props.fase === 1 || props.fase === 2 ? '130px' : '65px'};
+border: none;
 border-radius: 5px;
-box-shadow: 0px 4px 5px #00000026;
+box-shadow: 0px 4px 5px 0px #00000026;
+font-family: 'recursive';
+font-weight: ${(props) => props.fase === 1 || props.fase === 2 ? '400' : '700'};
+font-size:${(props) => props.fase === 1 || props.fase === 2 ? '18px' : '16px'};
+color: ${props => props.cor != null ? props.cor : '#333333'};
+margin-bottom: 25px;
+padding:${(props) => props.fase === 1 || props.fase === 2 ? '18px 15px 10px 15px' : '15px'};  ;
+background-color:${(props) => props.fase === 0 || props.fase === 3  ? '#FFFFFF': '#FFFFD4'} ;
+display: flex;
+flex-direction: ${(props => props.fase === 2 ? 'column': '' )};
+justify-content: space-between;
+align-items: center;
+text-decoration: ${(props) => props.fase === 3 ? 'line-through': 'none'};
+img {
+  width: ${(props) => props.fase === 1 ? '30px': '20px'};
+  align-self: ${(props) => props.fase === 1 ? 'end': 'center'};
+}
+h1 {
+  align-self: ${(props) => props.fase === 1 || props.fase === 2 ? 'start': 'center'};
+}
 `
