@@ -10,24 +10,30 @@ import { useState } from 'react'
 import Options from './Options.jsx'
 
 
+export const concluidas = [{
+  perguntas: cards.length,
+  respondidas: 0
+}];
+
 /* Elemento a ser incorporado no app */ 
-export default function Questions() { 
-  const [questoes, setEstadoQuestion] = useState( // Estado inicial é todos os itens de cards + a fase e status de resposta aberta e respondida
+export default function Questions({ setRespondidas}) { 
+  const [questoes, setEstadoQuestion] = useState( 
     cards.map(() => ({
       fase:0,
       optionSelected: null,
       icone: null
     }))
   )
+
 const revelaPergunta = (index) => { 
   setEstadoQuestion(prevState =>
     prevState.map((question, i)=> 
       i === index ? {...question, fase: 1} : question)
   )
-  console.log(questoes)
+
 }  
 const revelaResposta = (index) => {
-  console.log(index)
+  
   setEstadoQuestion(prevState => 
     prevState.map((question, i) => 
       i=== index ? {...question, fase: 2} : question))
@@ -35,16 +41,30 @@ const revelaResposta = (index) => {
 }
 
 const armazenaResposta = (indexCarta, index, option) => {
+  setRespondidas(prevState => prevState + 1)
   
+
   setEstadoQuestion(prevState => 
     prevState.map((question, i) =>
-  i === indexCarta ? {...question, optionSelected: (option === 'Zap!'? '#2FBE34'
-  : option === 'Quase não lembrei' ? 
-   '#FF922E' :'#FF3030' ), icone: (option === 'Zap!'? zap
-    : option === 'Quase não lembrei' ? 
-     quase : erro ), fase: 3} : question)
+  i === indexCarta 
+  ? {
+    ...question, 
+    optionSelected: 
+    (option === 'Zap!'
+      ? '#2FBE34'
+      : option === 'Quase não lembrei' 
+      ? '#FF922E' 
+      :'#FF3030' ), 
+      icone: 
+      (option === 'Zap!'
+      ? zap
+      : option === 'Quase não lembrei' 
+      ? quase 
+      : erro ), 
+      fase: 3} 
+      : question)
 )
-console.log(questoes)
+
 }
 
  return( 
@@ -53,8 +73,8 @@ console.log(questoes)
       <Question key={index} fase={questoes[index].fase} cor={questoes[index].optionSelected} icone={questoes[index].icone} > 
         { questoes[index].fase === 0 &&(
               <>
-              <h1 onClick={() => revelaPergunta(index)}>Pergunta {index +1}</h1>
-              <img  src={play_icon} alt='Icone de play'/>
+              <h1 >Pergunta {index +1}</h1>
+              <img  src={play_icon} alt='Icone de play' onClick={() => revelaPergunta(index)}/>
               </>
         )}
           { questoes[index].fase === 1 &&(
@@ -76,10 +96,13 @@ console.log(questoes)
               <h1>Pergunta {index +1 }</h1>
               <img  src={questoes[index].icone} alt='Icone de play'/>
               </>
-        )}
+        ) 
+        }
+        
       
         </Question>
     )}
+ 
     </Container>
 
   )
@@ -87,6 +110,8 @@ console.log(questoes)
 
 const Container = styled.div`
 width: 300px;
+height: 450px;
+overflow: auto;
 
 `
 

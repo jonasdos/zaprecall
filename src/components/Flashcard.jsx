@@ -1,14 +1,16 @@
-import logo from '../assets/logo.png'
 import styled from 'styled-components'
 import Questions from './Questions.jsx'
+import Footer from './Footer.jsx'
+import { useState } from 'react';
+import Titulo from './Titulo.jsx';
 export default function Flashcard() {
+
+  const [respondidas, setRespondidas] = useState(0);
+
  return( <Card>
-    <Titulo>
-      <img src={logo} alt="Icone" />
-      <h1>ZapRecall</h1>
-    </Titulo>
-    <Questions/>
-    <Bottom/>
+    <Titulo/>
+    <Questions setRespondidas={setRespondidas}/>
+    <Footer respondidas={respondidas}/>
   </Card>
   )
 }
@@ -17,37 +19,13 @@ const Card = styled.main`
 background-color: #FB6B6B;
 display: flex;
 flex-direction: column;
-max-width: 375px;
+width: 375px;
+height: 667px;
 padding-top: 44px;
 align-items: center;
-justify-content: center;
 box-shadow: 1px 1px 3px #07070737;
 border: none;
-`
-const Titulo = styled.div`
-display: flex;
-align-items: center;
-justify-content: space-around;
-width: 250px;
-margin-bottom: 40px;
-
-h1{
-  font-family: righteous;
-  font-weight: 400;
-  font-size: 36px;
-  line-height: 44.7px;
-  letter-spacing: -0.012em;
-  text-align: center;
-  color: #FFFFFF;
- 
-}
-img {
-  width: 52px;
-
-}
+position: relative;
 `
 
-const Bottom = styled.footer`
-background-color: #FFFFFF;
-height: 70px;
-`
+
