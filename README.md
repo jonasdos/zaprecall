@@ -15,6 +15,6 @@ A ideia é ler a pergunta ou afirmação e tentar lembrar da reposta. Isso te aj
 
 ## Como experimentar
 
-1 - Abra o link no navegador: https://zaprecall-k2omecn9m-sanojevs-projects.vercel.app/
+1 - Abra o link no navegador: https://zaprecall-git-main-sanojevs-projects.vercel.app/
 
 2 - Baixe arquivo do github, acesse a pasta raiz no terminal e execute npm start
